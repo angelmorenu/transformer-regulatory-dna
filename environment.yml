@@ -1,0 +1,25 @@
+name: bio-transformers
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - jupyterlab
+  - pip:
+      - torch
+      - torchvision
+      - torchaudio
+      - transformers
+      - tokenizers
+      - datasets
+      - pytorch-lightning
+      - biopython
+      - pyfaidx
+      - pybedtools
+      - tqdm
+      - seaborn
