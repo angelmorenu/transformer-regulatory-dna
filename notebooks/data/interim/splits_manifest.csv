@@ -1,0 +1,5 @@
+rid,chrom,start,end,label,split
+0331fe901f2c4fa0,1,1000,2000,0,train
+7e7e5c7af570c46b,2,2000,3000,1,train
+18569dd967b64e01,17,1500,2500,0,val
+9f4f7f036e4f31f4,19,1000,2000,1,test

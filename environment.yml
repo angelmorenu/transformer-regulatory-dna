@@ -11,9 +11,11 @@ dependencies:
   - matplotlib
   - jupyterlab
   - pip:
-      - torch
-      - torchvision
-      - torchaudio
+  - torch>=2.6
+  - torchvision
+  - torchaudio
+  - einops
+  - triton
       - transformers
       - tokenizers
       - datasets

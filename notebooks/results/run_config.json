@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-10-28 11:49:25",
+  "seed": 42,
+  "device": "cpu",
+  "model_name": "replace/with-safetensors-checkpoint",
+  "full_finetune": false,
+  "epochs": 3,
+  "batch_train": 64,
+  "batch_eval": 128,
+  "head_lr": 0.001,
+  "encoder_lr": 1e-05,
+  "weight_decay": 0.01,
+  "train_n": 24,
+  "val_n": 13,
+  "test_n": 13
+}
