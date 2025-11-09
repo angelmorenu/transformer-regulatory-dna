@@ -5,48 +5,63 @@
 **Instructor:** Dr. Tamer Kahveci  
 **Due Date:** December 5, 2025
 
-## Overview
-This project evaluates transformer-based language models for DNA sequence analysis, focusing on:
-1. Functional element classification (promoter/enhancer/DNase sites)  
-2. Non-coding variant effect prediction via in-silico mutagenesis  
+---
 
-This work applies modern NLP methods to DNA sequences.
+## Overview
+This project evaluates transformer-based sequence models for **functional genomics**—classifying regulatory elements (promoters, enhancers, DNase hypersensitive sites) and assessing **non-coding variant effects** using *in-silico saturation mutagenesis*.
+
+It extends the DeepSEA benchmark with modern transformer backbones, comparing CNN baselines (Basset/Basenji) vs DNABERT-2 and the Nucleotide Transformer.
+
+---
 
 ## Dataset Sources
-- DeepSEA Training Bundle: https://deepsea.princeton.edu/help/
-- ENCODE Portal: https://www.encodeproject.org/
-- Roadmap Epigenomics Portal (WashU): https://egg2.wustl.edu/roadmap/web_portal/
+- [DeepSEA Training Bundle](https://deepsea.princeton.edu/help/)
+- [ENCODE Portal](https://www.encodeproject.org/)
+- [Roadmap Epigenomics Portal (WashU)](https://egg2.wustl.edu/roadmap/web_portal/)
+
+---
 
 ## Models Implemented
-- CNN Baselines: Basset (https://github.com/davek44/Basset), Basenji (https://github.com/calico/basenji)  
-- Transformers: DNABERT-2 (https://huggingface.co/zhihan1996/DNABERT-2-117M), Nucleotide Transformer v2 (https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species)
+- **CNN Baselines:** Basset ([GitHub](https://github.com/davek44/Basset)), Basenji ([GitHub](https://github.com/calico/basenji))  
+- **Transformers:**  
+    - DNABERT-2 ([Hugging Face](https://huggingface.co/zhihan1996/DNABERT-2-117M))  
+    - Nucleotide Transformer v2 ([Hugging Face](https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species))
+
+---
 
 ## Evaluation Metrics
-- AUROC, PR-AUC  
-- Runtime / GPU memory profiling  
-- Cross-cell-type transfer tests  
-- Variant effect score correlation vs DeepSEA benchmarks  
+- **Classification:** AUROC, PR-AUC  
+- **Efficiency:** Runtime, GPU memory usage  
+- **Transferability:** Cross-cell-type evaluation  
+- **Variant Effects:** Correlation vs DeepSEA benchmark predictions
+
+---
 
 ## Environment Setup
 ```bash
 conda create -n bio-transformers python=3.10 -y
 conda activate bio-transformers
 pip install -r requirements.txt
+# Alternatively, use environment.yml for a full conda environment
 ```
-(Optional) If you prefer conda-only, use `environment.yml`.
+
+---
 
 ## Reproducing Results
-1. Download datasets → `data/raw/`  
-2. Run `notebooks/01_data_preprocessing.ipynb`  
-3. Train baselines → `notebooks/02_baseline_models.ipynb`  
-4. Fine-tune transformers → `notebooks/03_transformer_finetuning.ipynb`  
-5. Evaluate variant effects → `notebooks/04_variant_effects.ipynb`  
-6. Visualize & export tables/figures → `notebooks/05_results_visualization.ipynb`
+1. Download datasets and place under data/raw/  
+2. Preprocess data: notebooks/01_data_preprocessing.ipynb  
+3. Train CNN baselines: notebooks/02_baseline_models.ipynb  
+4. Fine-tune transformers: notebooks/03_transformer_finetuning.ipynb  
+5. Run variant effect prediction: notebooks/04_variant_effects.ipynb  
+6. Summarize & visualize results: notebooks/05_results_visualization.ipynb
+
+---
 
 ## Project Structure
 ```
 transformer-regulatory-dna/
 ├── README.md
+├── PROGRESS.md
 ├── environment.yml
 ├── requirements.txt
 ├── data/
@@ -59,17 +74,26 @@ transformer-regulatory-dna/
 │   ├── 04_variant_effects.ipynb
 │   └── 05_results_visualization.ipynb
 ├── src/
+│   ├── collate.py
 │   ├── data_utils.py
 │   ├── train_baseline.py
 │   ├── train_transformer.py
 │   └── evaluate.py
 ├── results/
 │   ├── metrics.csv
+│   ├── vep/
+│   │   ├── deltas_test.npz
+│   │   ├── deltas_test.tsv
+│   │   ├── top50_test.tsv
+│   │   └── summary.csv
 │   ├── plots/
 │   └── logs/
 └── report/
-    └── Morenu_CAP5510_ProjectReport.tex
+        └── Morenu_CAP5510_ProjectReport.tex
 ```
 
+---
+
 ## Contact
-angel.morenu@ufl.edu
+angel.morenu@ufl.edu  
+University of Florida — CAP 5510 Bioinformatics

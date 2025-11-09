@@ -1,0 +1,12 @@
+{
+  "split": "test",
+  "N": 8,
+  "L": 2000,
+  "ckpt": "probe_best.pt",
+  "scale": "logit",
+  "pos_step": 1,
+  "pos_chunk": null,
+  "batch": 256,
+  "K": 50,
+  "date": "2025-11-09T21:00:10Z"
+}
