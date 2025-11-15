@@ -2,6 +2,8 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{hyperref}
+% left-align captions (avoid centered TABLE titles)
+\usepackage[justification=raggedright,singlelinecheck=false]{caption}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{enumitem}
@@ -211,6 +213,8 @@ VEP validation & Manually inspect top-K variant sites and cross-check with motif
 
 \section*{Supplementary methods and runtime}
 All preprocessing, training, and visualization steps were executed using the repository scripts. Preprocessing includes coordinate parsing and one-hot encoding; training uses the harness in `src/train.py`. Typical runtimes on a single modern workstation are: preprocessing 10--20 minutes, CNN baseline training 30--60 minutes (CPU) or substantially faster on GPU, transformer probe training 5--20 minutes for the linear head, and VEP computations 5--15 minutes per dataset. Exact commands and environment specifications are tracked in `README.md` and `environment.yml` for reproducibility.
+
+Code and data: the full repository (code, processed inputs, notebooks, and results) is available at \url{https://github.com/angelmorenu/transformer-regulatory-dna}.
 
 % ---- Compute resource summary table ----
 \begin{table*}[!t]
