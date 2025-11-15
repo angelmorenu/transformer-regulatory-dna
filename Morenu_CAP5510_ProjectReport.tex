@@ -28,7 +28,7 @@ Transformer-based sequence models have recently achieved state-of-the-art perfor
 \end{abstract}
 
 \section{Introduction}
-Understanding how DNA sequence encodes regulatory function is one of the central challenges in computational genomics. Regulatory elements such as enhancers, promoters, and DNase-accessible regions control transcriptional programs and cellular identity.
+Understanding how DNA sequence encodes regulatory function is one of the central challenges in computational genomics. Regulatory elements such as enhancers, promoters, and DNase-accessible regions control transcriptional programs and cellular identity. Predicting their activity directly from sequence has been historically approached using convolutional neural networks (CNNs) such as DeepSEA \cite{zhou2015deepsea} and Basset \cite{kelley2016basset}. However, the emergence of transformer-based models, including DNABERT \cite{ji2021dnabert} and the Nucleotide Transformer \cite{dallatorre2023nucleotide}, has redefined the landscape of biological sequence modeling.
 
 Transformers offer longer effective context, attention-based interpretability, and strong transfer performance across related tasks. Yet, they are expensive to train end-to-end. A practical compromise is the \emph{linear probe} paradigm: freeze pretrained weights and train a lightweight classifier on top. This dramatically reduces compute while maintaining transformer representational power.
 
@@ -44,7 +44,7 @@ Unlike prior survey-style projects, this work includes \emph{my own custom imple
 
 \section{Methods}
 \subsection{Datasets}
-All datasets originate from the DeepSEA training bundle, ENCODE, and Roadmap epigenomics tracks (Zhou and Troyanskaya, 2015; DeepSEA portal; ENCODE Project; Roadmap Epigenomics). The processed data include:
+All datasets originate from the DeepSEA training bundle, ENCODE, and Roadmap epigenomics tracks \cite{zhou2015deepsea, deepsea_portal, encode_project, roadmap_portal}. The processed data include:
 \begin{itemize}
     \item Train, validation, and test splits: \texttt{train.npz}, \texttt{val.npz}, \texttt{test.npz}
     \item One-hot encoded sequences (length 1000 bases)
@@ -54,12 +54,12 @@ All datasets originate from the DeepSEA training bundle, ENCODE, and Roadmap epi
 \subsection{Models and sources}
 For model selection and baseline comparisons we used publicly available pretrained models and reference implementations. Primary sources include:
 \begin{itemize}
-    \item DNABERT-2 (HuggingFace): pretrained checkpoints and tokenizers (example: \url{https://huggingface.co/zhihan1996/DNABERT-2-117M}) (Nguyen et al., 2023).
-    \item Nucleotide Transformer (HuggingFace): multi-species pretrained checkpoints (example: \url{https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species}) (Dalla-Torre et al., 2023).
-    \item Basenji (Calico Labs): reference implementation and codebase (\url{https://github.com/calico/basenji}) (Calico Labs, Basenji GitHub).
-    \item Basset (reference implementation / baseline): codebase on GitHub (\url{https://github.com/davek44/Basset}) and original paper (Kelley et al., 2016).
-    \item DeepSEA resources and portal: model and data documentation (portal: \url{http://deepsea.princeton.edu/help/}) (DeepSEA portal; Zhou and Troyanskaya, 2015).
-    \item Optional ready-to-use model hubs (Kipoi): model cards and variant-effect wrappers (e.g., \url{https://kipoi.org/models/DeepSEA/predict/}, \url{https://kipoi.org/models/DeepSEA/variantEffects/}) (Kipoi model hub).
+    \item DNABERT-2 (HuggingFace): pretrained checkpoints and tokenizers (example: \url{https://huggingface.co/zhihan1996/DNABERT-2-117M}) \cite{nguyen2023dnabert2}.
+    \item Nucleotide Transformer (HuggingFace): multi-species pretrained checkpoints (example: \url{https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species}) \cite{dallatorre2023nucleotide}.
+    \item Basenji (Calico Labs): reference implementation and codebase (\url{https://github.com/calico/basenji}) \cite{basenji_github}.
+    \item Basset (reference implementation / baseline): codebase on GitHub (\url{https://github.com/davek44/Basset}) and original paper \cite{kelley2016basset}.
+    \item DeepSEA resources and portal: model and data documentation (portal: \url{http://deepsea.princeton.edu/help/}) \cite{deepsea_portal, zhou2015deepsea}.
+    \item Optional ready-to-use model hubs (Kipoi): model cards and variant-effect wrappers (e.g., \url{https://kipoi.org/models/DeepSEA/predict/}, \url{https://kipoi.org/models/DeepSEA/variantEffects/}) \cite{kipoi_models}.
 \end{itemize}
 
 Where available we used HuggingFace checkpoints as starting points for probes and finetuning; open-source Basenji/Basset code served as lightweight CNN baselines for direct implementation and runtime comparisons.
@@ -178,7 +178,7 @@ Figure~\ref{fig:vep} shows the variant effect heatmap for the test set.
 \noindent\textbf{Comparison to DeepSEA (summary):} \\
 % The macros above are generated by `scripts/write_vep_deepsea_tex.py`.
 \ifnum\VepDeepSeaAvailable=1
-Spearman: \VepDeepSeaSpearman{} (p=\VepDeepSeaSpearmanP{}). Top-K: K=10 overlap \VepDeepSeaTopK10Overlap{} (fold \VepDeepSeaTopK10Fold{}, p=\VepDeepSeaTopK10P{}); K=25 overlap \VepDeepSeaTopK25Overlap{} (fold \VepDeepSeaTopK25Fold{}, p=\VepDeepSeaTopK25P{}); K=50 overlap \VepDeepSeaTopK50Overlap{} (fold \VepDeepSeaTopK50Fold{}, p=\VepDeepSeaTopK50P{}).
+Spearman: \VepDeepSeaSpearman{} (p=\VepDeepSeaSpearmanP{}). Top-K: K=10 overlap \VepDeepSeaTopKTenOverlap{} (fold \VepDeepSeaTopKTenFold{}, p=\VepDeepSeaTopKTenP{}); K=25 overlap \VepDeepSeaTopKTwentyFiveOverlap{} (fold \VepDeepSeaTopKTwentyFiveFold{}, p=\VepDeepSeaTopKTwentyFiveP{}); K=50 overlap \VepDeepSeaTopKFiftyOverlap{} (fold \VepDeepSeaTopKFiftyFold{}, p=\VepDeepSeaTopKFiftyP{}).
 \else\ifnum\VepDeepSeaAvailable=2
 Processed-test fallback: \VepDeepSeaFallbackSamples{} samples, max score \VepDeepSeaFallbackMaxScore{}.
 \else
@@ -269,7 +269,6 @@ Basset baseline & 64 & 2.4 & 0.4 min & Very efficient CNN baseline; fast per-epo
 
 \section{Discussion}
 This project demonstrates that transformer-based models provide meaningful improvements for regulatory genomics tasks even when used in frozen linear-probe mode. My work shows:
-% (intentionally removed duplicate sentence)
 
 \begin{itemize}
     \item Transformers outperform CNNs on PR-AUC.
@@ -277,7 +276,7 @@ This project demonstrates that transformer-based models provide meaningful impro
     \item The pipeline works robustly across multiple data splits and input formats.
 \end{itemize}
 
-All datasets originate from the DeepSEA training bundle, ENCODE, and Roadmap epigenomics tracks (Zhou and Troyanskaya, 2015; DeepSEA portal; ENCODE Project; Roadmap Epigenomics). The processed data include:
+\textbf{My contribution} was building the entire pipeline from scratch, integrating CNNs, transformers, preprocessing, variant effects, and visualization. This exceeds a typical course project by including original engineering decisions, reproducible evaluation, and interpretation aligned with real bioinformatics workflows.
 
 \subsection{Failure cases and limitations}
 Here I summarize practical failure modes observed during experiments and limitations of the methods used.
@@ -285,7 +284,7 @@ Here I summarize practical failure modes observed during experiments and limitat
 \paragraph{Variant effect prediction limitations}
 \begin{itemize}
     \item Saturation mutagenesis may underestimate long-range interactions because the procedure perturbs single positions independently; epistatic or distal interactions will be missed.
-    \item The transformer context window used in most experiments is limited (512 bp in practice), which reduces sensitivity to regulatory elements acting at longer ranges (Avsec et al., 2021).
+    \item The transformer context window used in most experiments is limited (512 bp in practice), which reduces sensitivity to regulatory elements acting at longer ranges \cite{avsec2021enformer}.
     \item Small $\Delta$ logits are difficult to interpret biologically: noise in the prediction or calibration differences can overwhelm subtle signals.
     \item There is a lack of comprehensive cross-cell-type ground truth for VEP validation, so biological validation remains approximate.
 \end{itemize}
