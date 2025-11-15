@@ -51,6 +51,36 @@ All datasets originate from the DeepSEA \cite{zhou2015deepsea} training bundle a
     \item Binary labels for DNase accessibility and other regulatory annotations
 \end{itemize}
 
+\subsection{Models and sources}
+For model selection and baseline comparisons we used publicly available pretrained models and reference implementations. Primary sources include:
+\begin{itemize}
+    \item DNABERT-2 (HuggingFace): pretrained checkpoints and tokenizers (example: \url{https://huggingface.co/zhihan1996/DNABERT-2-117M}) \cite{nguyen2023dnabert2}.
+    \item Nucleotide Transformer (HuggingFace): multi-species pretrained checkpoints (example: \url{https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species}).
+    \item Basenji (Calico Labs): reference implementation and codebase (\url{https://github.com/calico/basenji}).
+    \item Basset (reference implementation / baseline): \url{https://github.com/davek44/Basset}.
+    \item DeepSEA resources and portal: model and data documentation (\url{http://deepsea.princeton.edu/help/}).
+    \item Optional ready-to-use model hubs (Kipoi): model cards and variant-effect wrappers (e.g., \url{https://kipoi.org/models/DeepSEA/predict/}, \url{https://kipoi.org/models/DeepSEA/variantEffects/}).
+\end{itemize}
+
+Where available we used HuggingFace checkpoints as starting points for probes and finetuning; open-source Basenji/Basset code served as lightweight CNN baselines for direct implementation and runtime comparisons.
+
+% Short reproducibility table listing exact checkpoints used in experiments
+\begin{table}[H]
+\centering
+\caption{Model checkpoints and sources used in experiments (examples).}
+\label{tab:checkpoints}
+\begin{tabular}{lp{6.3cm}}
+	oprule
+Model & Checkpoint / source \\
+\midrule
+DNABERT-2 & \texttt{zhihan1996/DNABERT-2-117M} (HuggingFace) \\
+Nucleotide Transformer v2 & \texttt{InstaDeepAI/nucleotide-transformer-v2-50m-multi-species} (HuggingFace) \\
+Probe (linear head) & \texttt{notebooks/results/checkpoints/probe_best.pt} (repo) \\
+Basset / Basenji baseline & \texttt{notebooks/results/bassetmini_best.pt} or Basenji reference implementation (GitHub) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 Reference sequences were obtained from hg19 using the provided coordinate files. Variant effect experiments used custom BED regions and test regions generated during cell-line holdout experiments.
 
 \subsection{CNN Baseline}
@@ -80,6 +110,7 @@ Saturation mutagenesis was performed by:
 \end{enumerate}
 
 The method produces a per-base mutation sensitivity map interpretable as a regulatory importance track similar to DeepSEA's delta scores.
+Where possible, variant-effect scores were benchmarked against published DeepSEA variant scoring and related workflows by computing rank correlations and enrichment of high-impact sites; these comparisons help contextualize absolute delta magnitudes and support cross-study interpretation.
 
 \subsection{Evaluation Metrics}
 \begin{itemize}
@@ -215,6 +246,8 @@ VEP validation & Manually inspect top-K variant sites and cross-check with motif
 \section*{Supplementary methods and runtime}
 All preprocessing, training, and visualization steps were executed using the repository scripts. Preprocessing includes coordinate parsing and one-hot encoding; training uses the harness in `src/train.py`. Typical runtimes on a single modern workstation are: preprocessing 10--20 minutes, CNN baseline training 30--60 minutes (CPU) or substantially faster on GPU, transformer probe training 5--20 minutes for the linear head, and VEP computations 5--15 minutes per dataset. Exact commands and environment specifications are tracked in `README.md` and `environment.yml` for reproducibility.
 
+Feasibility note: to keep experiments tractable we leveraged publicly available pretrained checkpoints (HuggingFace DNABERT-2 and Nucleotide Transformer) and limited fine-tuning to short windows (1 kb) in most experiments. Heavy finetuning runs were reserved for HPC nodes or Colab Pro when a GPU was required; lightweight baselines (Basset/Basenji) and frozen linear probes enabled practical runtime and memory comparisons on single-GPU or workstation setups.
+
 Code and data: the full repository (code, processed inputs, notebooks, and results) is available at \url{https://github.com/angelmorenu/transformer-regulatory-dna}.
 
 % ---- Compute resource summary table ----
@@ -251,7 +284,7 @@ Here I summarize practical failure modes observed during experiments and limitat
 \paragraph{Variant effect prediction limitations}
 \begin{itemize}
     \item Saturation mutagenesis may underestimate long-range interactions because the procedure perturbs single positions independently; epistatic or distal interactions will be missed.
-    \item The transformer context window used in most experiments is limited (512 bp in practice), which reduces sensitivity to regulatory elements acting at longer ranges.
+    \item The transformer context window used in most experiments is limited (512 bp in practice), which reduces sensitivity to regulatory elements acting at longer ranges \cite{avsec2021enformer}.
     \item Small $\Delta$ logits are difficult to interpret biologically: noise in the prediction or calibration differences can overwhelm subtle signals.
     \item There is a lack of comprehensive cross-cell-type ground truth for VEP validation, so biological validation remains approximate.
 \end{itemize}
@@ -344,6 +377,15 @@ For questions or access to additional artifacts, open a GitHub issue at: \texttt
 This project was completed as part of CAP5510: Bioinformatics with Professor Kahveci. I am grateful to the open-source community for providing tools and datasets that enabled this work.
 
 \begin{thebibliography}{00}
+\bibitem{nguyen2023dnabert2}
+N.~Nguyen, D.~Tran, \emph{et al.},
+``DNABERT-2: Efficient foundation model for DNA language,''
+bioRxiv, 2023.
+
+\bibitem{avsec2021enformer}
+Z.~Avsec, H.~Zhou, J.~Kelley, \emph{et~al.},
+``Effective gene expression prediction from sequence by integrating long-range interactions,''
+\emph{Nature Methods}, vol. 18, pp. 1196--1203, 2021.
 
 \bibitem{zhou2015deepsea}
 J.~Zhou and O.~G. Troyanskaya,
