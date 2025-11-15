@@ -207,8 +207,7 @@ Processed-test fallback: \VepDeepSeaFallbackSamples{} samples, max score \VepDee
 \else
 No DeepSEA comparison available (see \texttt{notebooks/results/plots/vep_deepsea_summary.tex}).
 \fi\fi
-
-    	extbf{Interpretation:}  
+\n    \textbf{Interpretation:}  
 The model highlights nucleotides consistent with expected transcription factor binding sites. I believe the smoothness of the transformer attention layers helps capture broader context compared to CNN filters.
 
 \subsection{Top-K Variant Effects}
@@ -222,6 +221,18 @@ Figure~\ref{fig:topk} shows the highest-impact mutations.
 
 \textbf{Opinion:}  
 The impact distribution suggests the model is sensitive to specific motif disruptions, supporting its biological relevance. CNNs showed flatter distributions.
+
+% --- Figure file manifest ---
+\subsection*{Figure files used}
+The figures included in this report are stored under \texttt{notebooks/results/plots/} and correspond to the following files (each referenced in-text by its figure number):
+\begin{itemize}
+    \item \texttt{notebooks/results/plots/metrics\_bar\_auroc\_test.png} (Figure~\ref{fig:auroc}) -- aggregated AUROC across splits.
+    \item \texttt{notebooks/results/plots/metrics\_bar\_prauc\_all.png} (Figure~\ref{fig:prauc}) -- aggregated PR-AUC across splits.
+    \item \texttt{notebooks/results/plots/vep\_heatmap\_test.png} (Figure~\ref{fig:vep}) -- variant effect heatmap for test sequences.
+    \item \texttt{notebooks/results/plots/topk\_bar\_test.png} (Figure~\ref{fig:topk}) -- top-50 variant effects bar plot.
+\end{itemize}
+
+These files are committed in the repository so the report can include the figures during build. If any figure is missing, regenerate the corresponding notebook or run the plotting script in \texttt{notebooks/05\_results\_visualization.ipynb}.
 \section*{Quantitative summary}
 To complement the visualizations, Table~\ref{tab:metrics} reports aggregated mean metrics computed across splits for the main models evaluated in this work. These summary statistics provide a compact comparison used in the interpretation above.
 
@@ -342,7 +353,7 @@ To facilitate reproducibility and document the ranges explored during developmen
 \centering
 \begin{tabular}{p{2.2cm} p{2cm} p{3.6cm}}
 \hline
-	extbf{Parameter} & \textbf{Range} & \textbf{Notes} \\
+        extbf{Parameter} & \textbf{Range} & \textbf{Notes} \\
 \hline
 Learning rate (probe head) & $1\times 10^{-5}$ -- $1\times 10^{-3}$ & Log-uniform sweep, default $5\times10^{-4}$ \\
 Batch size & 8 -- 64 & Determined by GPU memory; CNNs allow larger batches \\
