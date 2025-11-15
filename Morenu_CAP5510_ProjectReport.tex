@@ -9,6 +9,7 @@
 \usepackage{enumitem}
 \usepackage{float}
 \usepackage{cite}
+\usepackage{balance}
 
 \title{Transformer Fine-Tuning for Regulatory DNA:\\
 Classification of Functional Elements and Variant Effect Prediction}
@@ -94,14 +95,14 @@ Figure~\ref{fig:auroc} and Figure~\ref{fig:prauc} show the aggregated AUROC and 
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.30\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_auroc_test.png}
+    \includegraphics[width=\textwidth,height=0.34\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_auroc_test.png}
     \caption{Aggregated AUROC across all splits (double-column).}
     \label{fig:auroc}
 \end{figure*}
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.30\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_prauc_all.png}
+    \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_prauc_all.png}
     \caption{Aggregated PR-AUC across all splits (double-column).}
     \label{fig:prauc}
 \end{figure*}
@@ -159,7 +160,7 @@ Split-specific figures (test/val) reveal that transformer gains are more pronoun
 Figure~\ref{fig:vep} shows the variant effect heatmap for the test set.
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{notebooks/results/plots/vep_heatmap_test.png}
+    \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{notebooks/results/plots/vep_heatmap_test.png}
     \caption{Variant effect heatmap across positions (double-column view).}
     \label{fig:vep}
 \end{figure*}
@@ -171,7 +172,7 @@ The model highlights nucleotides consistent with expected transcription factor b
 Figure~\ref{fig:topk} shows the highest-impact mutations.
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{notebooks/results/plots/topk_bar_test.png}
+    \includegraphics[width=\textwidth,height=0.38\textheight,keepaspectratio]{notebooks/results/plots/topk_bar_test.png}
     \caption{Top 50 variant effects ranked by magnitude (double-column view).}
     \label{fig:topk}
 \end{figure*}
@@ -222,7 +223,7 @@ Code and data: the full repository (code, processed inputs, notebooks, and resul
 \caption{GPU / Compute resource summary (train/eval times and memory usage).}
 \label{tab:compute}
 \begin{tabular}{lccccp{6cm}}
-    oprule
+    \toprule
 Model & Batch Size & GPU Memory (GB) & Epoch Time & Notes \\
 \midrule
 DNABERT-2 linear probe & 32 & 7.9 & 1.2 min & Fast; frozen encoder, low GPU memory footprint \\
@@ -272,6 +273,19 @@ This project was an opportunity to explore how modern transformer architectures 
 
 Planned next steps include: (1) full fine-tuning of DNABERT-2 over longer windows to assess long-range effects, (2) cross-cell-type transfer experiments to measure generalization, and (3) integrating complementary signals (e.g., chromatin accessibility) to improve VEP calibration. I welcome collaboration and feedback — please open an issue or pull request on the project repository if you reproduce these results or want to extend the experiments.
 \fussy
+
+\section*{Contributions}
+The following contributions summarize the author's work on this project and may be used for attribution or grading:
+\begin{itemize}
+    \item Conceptualization and project design: A.M.
+    \item Implementation: data preprocessing, CNN baseline, transformer probe, training harness, and VEP pipeline: A.M.
+    \item Experiments and analysis: model training runs, variant-effect analyses, plotting, and statistical summaries: A.M.
+    \item Writing and visualization: manuscript text, figures, and result interpretation: A.M.
+    \item Reproducibility artifacts: notebooks, scripts, and environment specification included in repository: A.M.
+\end{itemize}
+
+% small nudge to help final page balancing if needed
+\enlargethispage{2\baselineskip}
 
 \section*{APPENDIX: REPRODUCIBILITY AND HYPERPARAMETER RANGES}
 
