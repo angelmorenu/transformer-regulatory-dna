@@ -1,7 +1,7 @@
 
 ---
 
-### ✅ **Updated `PROGRESS.md`**
+### **Updated `PROGRESS.md`**
 Extends your week tracker to include fine-tuning and variant-effect evaluation milestones:
 
 ```markdown
@@ -9,7 +9,7 @@ Extends your week tracker to include fine-tuning and variant-effect evaluation m
 
 ---
 
-### **Week 1 – Data Pipeline & Preprocessing** ✅ *Completed*
+### **Week 1 – Data Pipeline & Preprocessing Completed**
 - Sequence window extraction and dataset serialization (`.npz`)
 - BED/FASTA parsing utilities for reference genomes
 - Split generation: train / validation / test
