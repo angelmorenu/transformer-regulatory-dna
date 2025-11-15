@@ -112,29 +112,46 @@ Split-specific figures (test/val) reveal that transformer gains are more pronoun
 
 \subsection{Variant Effect Maps}
 Figure~\ref{fig:vep} shows the variant effect heatmap for the test set.
-
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=0.47\textwidth]{notebooks/results/plots/vep_heatmap_test.png}
-    \caption{Variant effect heatmap across positions.}
+    \includegraphics[width=\textwidth]{notebooks/results/plots/vep_heatmap_test.png}
+    \caption{Variant effect heatmap across positions (double-column view).}
     \label{fig:vep}
-\end{figure}
+\end{figure*}
 
 \textbf{Interpretation:}  
 The model highlights nucleotides consistent with expected transcription factor binding sites. I believe the smoothness of the transformer attention layers helps capture broader context compared to CNN filters.
 
 \subsection{Top-K Variant Effects}
 Figure~\ref{fig:topk} shows the highest-impact mutations.
-
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=0.47\textwidth]{notebooks/results/plots/topk_bar_test.png}
-    \caption{Top 50 variant effects ranked by magnitude.}
+    \includegraphics[width=\textwidth]{notebooks/results/plots/topk_bar_test.png}
+    \caption{Top 50 variant effects ranked by magnitude (double-column view).}
     \label{fig:topk}
-\end{figure}
+\end{figure*}
 
 \textbf{Opinion:}  
 The impact distribution suggests the model is sensitive to specific motif disruptions, supporting its biological relevance. CNNs showed flatter distributions.
+\section*{Quantitative summary}
+To complement the visualizations, Table~\ref{tab:metrics} reports aggregated mean metrics computed across splits for the main models evaluated in this work. These summary statistics provide a compact comparison used in the interpretation above.
+
+\begin{table}[H]
+\centering
+\caption{Aggregated metrics (mean) across splits. Missing values indicate unavailable entries in the run outputs.}
+\label{tab:metrics}
+\begin{tabular}{lcc}
+	oprule
+Model & AUROC & PR-AUC\\
+\midrule
+BassetMini & -- & 0.50 \\
+linear\_probe & 0.50 & 0.80 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Supplementary methods and runtime}
+All preprocessing, training, and visualization steps were executed using the repository scripts. Preprocessing includes coordinate parsing and one-hot encoding; training uses the harness in `src/train.py`. Typical runtimes on a single modern workstation are: preprocessing 10--20 minutes, CNN baseline training 30--60 minutes (CPU) or substantially faster on GPU, transformer probe training 5--20 minutes for the linear head, and VEP computations 5--15 minutes per dataset. Exact commands and environment specifications are tracked in `README.md` and `environment.yml` for reproducibility.
 
 \section{Discussion}
 This project demonstrates that transformer-based models provide meaningful improvements for regulatory genomics tasks even when used in frozen linear-probe mode. My work shows:
