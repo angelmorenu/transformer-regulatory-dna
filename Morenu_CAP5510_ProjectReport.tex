@@ -268,7 +268,9 @@ In my interpretation, the flat delta regions indicate that the model was unable 
 
 \section{Conclusion}
 \sloppy
-Transformers offer a promising direction for regulatory sequence modeling. Even lightweight fine-tuning yields interpretable and biologically meaningful results. Future work includes full fine-tuning on GPU clusters, integrating \texttt{DNABERT-2} checkpoints, and comparing against \texttt{Basenji2}.
+This project was an opportunity to explore how modern transformer architectures perform on regulatory DNA tasks under realistic resource constraints. I implemented a reproducible pipeline, benchmarked a compact CNN baseline against a frozen transformer probe, and developed a variant-effect prediction workflow to interpret model behavior at single-nucleotide resolution. The practical takeaway is that a frozen transformer probe can provide improved PR-AUC and produce biologically plausible variant-effect maps while keeping compute and tuning costs low; however, full end-to-end fine-tuning remains necessary to capture positional sensitivity and long-range interactions robustly.
+
+Planned next steps include: (1) full fine-tuning of DNABERT-2 over longer windows to assess long-range effects, (2) cross-cell-type transfer experiments to measure generalization, and (3) integrating complementary signals (e.g., chromatin accessibility) to improve VEP calibration. I welcome collaboration and feedback — please open an issue or pull request on the project repository if you reproduce these results or want to extend the experiments.
 \fussy
 
 \section*{APPENDIX: REPRODUCIBILITY AND HYPERPARAMETER RANGES}
