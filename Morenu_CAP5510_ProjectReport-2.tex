@@ -21,11 +21,11 @@ Email: angel.morenu@ufl.edu}
 \maketitle
 
 \begin{abstract}
-Transformer-based sequence models have recently achieved state-of-the-art performance across genomics tasks traditionally dominated by convolutional neural networks (CNNs). In this project, I evaluate the effectiveness of transformer architectures---fine-tuned with a linear probe---for predicting regulatory DNA activity and quantifying the functional impact of single-nucleotide variants through in-silico saturation mutagenesis. I implement a full pipeline including data preprocessing, CNN baselines, transformer fine-tuning, variant effect prediction, and visualization. I compare model performance using AUROC, PR-AUC, and mutation impact scores. My primary contribution is the integration of a modern transformer workflow with an interpretable variant-effect module and a complete experimental evaluation across regulatory tasks. Results show that the transformer probe surpasses the CNN baseline in PR-AUC and produces biologically plausible variant effect maps. I conclude with a discussion of limitations, biological interpretation, and ideas for future improvement.
+Transformer-based sequence models have recently achieved state-of-the-art performance across genomics tasks traditionally dominated by convolutional neural networks (CNNs). In this project, I evaluate the effectiveness of transformer architectures fine-tuned with a linear probe for predicting regulatory DNA activity and quantifying the functional impact of single-nucleotide variants through in-silico saturation mutagenesis. I implement a full pipeline including data preprocessing, CNN baselines, transformer fine-tuning, variant effect prediction, and visualization. I compare model performance using AUROC, PR-AUC, and mutation impact scores. My primary contribution is the integration of a modern transformer workflow with an interpretable variant-effect module and a complete experimental evaluation across regulatory tasks. Results show that the transformer probe surpasses the CNN baseline in PR-AUC and produces biologically plausible variant effect maps. I conclude with a discussion of limitations, biological interpretation, and ideas for future improvement.
 \end{abstract}
 
 \section{Introduction}
-Understanding how DNA sequence encodes regulatory function is one of the central challenges in computational genomics. Regulatory elements such as enhancers, promoters, and DNase-accessible regions control transcriptional programs and cellular identity. Predicting their activity directly from sequence has been historically approached using convolutional neural networks (CNNs) such as DeepSEA \cite{zhou2015deepsea} and Basset \cite{kelley2016basset}. However, the emergence of transformer-based models---including DNABERT \cite{ji2021dnabert} and the Nucleotide Transformer \cite{dallatorre2023nucleotide}---has redefined the landscape of biological sequence modeling.
+Understanding how DNA sequence encodes regulatory function is one of the central challenges in computational genomics. Regulatory elements such as enhancers, promoters, and DNase-accessible regions control transcriptional programs and cellular identity. Predicting their activity directly from sequence has been historically approached using convolutional neural networks (CNNs) such as DeepSEA \cite{zhou2015deepsea} and Basset \cite{kelley2016basset}. However, the emergence of transformer-based models, including DNABERT \cite{ji2021dnabert} and the Nucleotide Transformer \cite{dallatorre2023nucleotide}, has redefined the landscape of biological sequence modeling.
 
 Transformers offer longer effective context, attention-based interpretability, and strong transfer performance across related tasks. Yet, they are expensive to train end-to-end. A practical compromise is the \emph{linear probe} paradigm: freeze pretrained weights and train a lightweight classifier on top. This dramatically reduces compute while maintaining transformer representational power.
 
@@ -90,12 +90,12 @@ The method produces a per-base mutation sensitivity map interpretable as a regul
 \subsection{Model Classification Performance}
 Figure~\ref{fig:auroc} and Figure~\ref{fig:prauc} show the aggregated AUROC and PR-AUC across all models and splits.
 
-\begin{figure}[H]
+\begin{figure*}[!t]
     \centering
-    \includegraphics[width=0.47\textwidth]{notebooks/results/plots/metrics_bar_auroc_test.png}
-    \caption{Aggregated AUROC across all splits.}
+    \includegraphics[width=\textwidth,height=0.30\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_auroc_test.png}
+    \caption{Aggregated AUROC across all splits (double-column).}
     \label{fig:auroc}
-\end{figure}
+\end{figure*}
 
 \begin{figure}[H]
     \centering
@@ -103,6 +103,25 @@ Figure~\ref{fig:auroc} and Figure~\ref{fig:prauc} show the aggregated AUROC and 
     \caption{Aggregated PR-AUC across all splits.}
     \label{fig:prauc}
 \end{figure}
+
+% small hyperparameters table to document tuning
+\begin{table}[H]
+\centering
+\caption{Key hyperparameters used in representative runs.}
+\label{tab:hyper}
+\begin{tabular}{lcc}
+	oprule
+Model & LR & Epochs\\
+\midrule
+Basset & $1\times10^{-3}$ & 30\\
+Transformer probe & $5\times10^{-4}$ & 10\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% short interpretive paragraph (adds modest vertical content)
+\paragraph{Additional observations}
+Across many runs the transformer probe provided stable ranking improvements (higher PR-AUC) even when absolute AUROC gains were modest. The probe's frozen encoder simplifies tuning but preserves representational power; this resulted in faster runs and smaller memory needs compared to full finetuning. Practical hyperparameter sensitivity centered on the learning rate for the probe head and the batch size for GPU memory constraints. I also noticed that variant-effect heatmaps often show localized peaks near motif-like patterns, while many positions remain flat—this pattern suggests the model learned motif-centric signals but struggles with diffuse, long-range regulatory interactions. These interpretive notes guided the experimental choices documented above and are reflected in the runtime/compute table.
 
 \textbf{My interpretation:}  
 The transformer probe consistently performed better on PR-AUC despite similar AUROC. I believe this indicates the probe's strength in ranking the minority positive class, which is crucial in regulatory genomics where positives are rare.
@@ -114,7 +133,7 @@ Split-specific figures (test/val) reveal that transformer gains are more pronoun
 Figure~\ref{fig:vep} shows the variant effect heatmap for the test set.
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth]{notebooks/results/plots/vep_heatmap_test.png}
+    \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{notebooks/results/plots/vep_heatmap_test.png}
     \caption{Variant effect heatmap across positions (double-column view).}
     \label{fig:vep}
 \end{figure*}
@@ -126,7 +145,7 @@ The model highlights nucleotides consistent with expected transcription factor b
 Figure~\ref{fig:topk} shows the highest-impact mutations.
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth]{notebooks/results/plots/topk_bar_test.png}
+    \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{notebooks/results/plots/topk_bar_test.png}
     \caption{Top 50 variant effects ranked by magnitude (double-column view).}
     \label{fig:topk}
 \end{figure*}
@@ -195,7 +214,7 @@ Here I summarize practical failure modes observed during experiments and limitat
 \paragraph{Model behavior observations}
 \begin{itemize}
     \item Flat delta curves often occur when the model weights assign similar scores across mutated sequences; this may indicate reliance on short motifs that are not disrupted by single substitutions at some positions.
-    \item PR-AUC being higher than AUROC in our experiments typically indicates that the model ranks positives more effectively than it separates classes uniformly — in imbalanced regulatory datasets, PR-AUC is often more informative.
+    \item PR-AUC being higher than AUROC in our experiments typically indicates that the model ranks positives more effectively than it separates classes uniformly in imbalanced regulatory datasets; PR-AUC is often more informative.
     \item The CNN baseline sometimes underperforms due to underfitting or over-regularization; the limited receptive field and inductive bias toward local motifs can miss high-order dependencies captured by transformers.
     \item Tokenization granularity (k-mer vs one-hot) affects signal: k-mer tokenization can blur single-base resolution but capture motif co-occurrences, while one-hot preserves nucleotide-level variation for VEP.
 \end{itemize}
