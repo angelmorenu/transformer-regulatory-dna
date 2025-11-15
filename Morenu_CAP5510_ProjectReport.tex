@@ -92,14 +92,14 @@ Figure~\ref{fig:auroc} and Figure~\ref{fig:prauc} show the aggregated AUROC and 
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.32\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_auroc_test.png}
+    \includegraphics[width=\textwidth,height=0.30\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_auroc_test.png}
     \caption{Aggregated AUROC across all splits (double-column).}
     \label{fig:auroc}
 \end{figure*}
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.34\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_prauc_all.png}
+    \includegraphics[width=\textwidth,height=0.30\textheight,keepaspectratio]{notebooks/results/plots/metrics_bar_prauc_all.png}
     \caption{Aggregated PR-AUC across all splits (double-column).}
     \label{fig:prauc}
 \end{figure*}
@@ -157,7 +157,7 @@ Split-specific figures (test/val) reveal that transformer gains are more pronoun
 Figure~\ref{fig:vep} shows the variant effect heatmap for the test set.
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth,height=0.38\textheight,keepaspectratio]{notebooks/results/plots/vep_heatmap_test.png}
+    \includegraphics[width=\textwidth,height=0.36\textheight,keepaspectratio]{notebooks/results/plots/vep_heatmap_test.png}
     \caption{Variant effect heatmap across positions (double-column view).}
     \label{fig:vep}
 \end{figure*}
@@ -179,22 +179,19 @@ The impact distribution suggests the model is sensitive to specific motif disrup
 \section*{Quantitative summary}
 To complement the visualizations, Table~\ref{tab:metrics} reports aggregated mean metrics computed across splits for the main models evaluated in this work. These summary statistics provide a compact comparison used in the interpretation above.
 
-\begin{table*}[!t]
+\begin{table}[H]
 \centering
 \caption{Aggregated metrics (mean) across splits. Missing values indicate unavailable entries in the run outputs.}
 \label{tab:metrics}
 \begin{tabular}{lcc}
-	oprule
+\toprule
 Model & AUROC & PR-AUC\\
 \midrule
 BassetMini & -- & 0.50 \\
 linear\_probe & 0.50 & 0.80 \\
 \bottomrule
 \end{tabular}
-\end{table*}
-
-% concise interpretive paragraph (adds a small amount of vertical content)
-These aggregated metrics summarize differences between models: while AUROC values are similar, the transformer probe's higher PR-AUC indicates improved ranking of rare positives. This behavior is practically important in regulatory genomics where recall at high precision matters for downstream biological validation.
+\end{table}
 
 % ---- Practical recommendations (adds measured vertical content to help reach page target) ----
 \begin{table*}[!t]
