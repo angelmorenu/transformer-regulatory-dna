@@ -222,7 +222,7 @@ Code and data: the full repository (code, processed inputs, notebooks, and resul
 \caption{GPU / Compute resource summary (train/eval times and memory usage).}
 \label{tab:compute}
 \begin{tabular}{lccccp{6cm}}
-	oprule
+    oprule
 Model & Batch Size & GPU Memory (GB) & Epoch Time & Notes \\
 \midrule
 DNABERT-2 linear probe & 32 & 7.9 & 1.2 min & Fast; frozen encoder, low GPU memory footprint \\
@@ -271,45 +271,87 @@ In my interpretation, the flat delta regions indicate that the model was unable 
 Transformers offer a promising direction for regulatory sequence modeling. Even lightweight fine-tuning yields interpretable and biologically meaningful results. Future work includes full fine-tuning on GPU clusters, integrating \texttt{DNABERT-2} checkpoints, and comparing against \texttt{Basenji2}.
 \fussy
 
-\section*{Appendix: reproducibility and hyperparameter ranges}
-To facilitate reproducibility and to document the ranges explored during development, Table~\ref{tab:hp_ranges} lists the primary hyperparameter ranges used in ablation and tuning sweeps. These ranges and the checklist above should allow other researchers to replicate the main experiments with minor adjustments for compute availability. For a more detailed ablation (per-task breakdown and additional plots) see the extended report attached with this submission.
+\section*{APPENDIX: REPRODUCIBILITY AND HYPERPARAMETER RANGES}
 
-\begin{table*}[!t]
-\centering
+To facilitate reproducibility and document the ranges explored during development, Table~\ref{tab:hyperparams} summarizes the primary hyperparameter sweeps used throughout tuning and ablation experiments. These ranges reflect GPU memory limits, training stability observations, and validation feedback.
+
+\begin{table}[h]
 \caption{Hyperparameter ranges used during tuning and ablation.}
-\label{tab:hp_ranges}
-\begin{tabular}{llp{8cm}}
-	oprule
-Parameter & Range & Notes \\
-\midrule
-Learning rate (probe head) & $1\times10^{-5}$ -- $1\times10^{-3}$ & Typical sweep: log-uniform; default used: $5\times10^{-4}$. \\
-Batch size & 8 -- 64 & Chosen by GPU memory; larger batches used for CNN baseline. \\
-Weight decay & 0 -- $1\times10^{-2}$ & Small weight decay stabilizes probe training. \\
-Epochs & 6 -- 30 & Early stopping on val AUROC with patience 5. \\
-Sequence length & 1000 (default) & Longer windows (3k--5k) were considered in extended experiments; see extended report. \\
-\bottomrule
+\label{tab:hyperparams}
+\centering
+\begin{tabular}{p{2.2cm} p{2cm} p{3.6cm}}
+\hline
+	extbf{Parameter} & \textbf{Range} & \textbf{Notes} \\
+\hline
+Learning rate (probe head) & $1\times 10^{-5}$ -- $1\times 10^{-3}$ & Log-uniform sweep, default $5\times10^{-4}$ \\
+Batch size & 8 -- 64 & Determined by GPU memory; CNNs allow larger batches \\
+Weight decay & 0 -- $1\times 10^{-2}$ & Small decay improves stability \\
+Epochs & 6 -- 30 & Early stopping on val AUROC, patience=5 \\
+Sequence length & 1000 & Longer windows (3k--5k) tested separately \\
+\hline
 \end{tabular}
-\end{table*}
+\end{table}
 
-\paragraph{Quick reproduce commands}
-Example commands to reproduce the main runs (adjust `--config` to local paths):
+\vspace{0.2cm}
+
+\subsection*{A. Quick Reproduce Commands}
+
+Example commands to reproduce the main runs:
+
 \begin{verbatim}
-# preprocess
-python src/collate.py --out data/processed --coords data/raw/coords.tsv
+# Preprocess data
+python src/collate.py --out data/processed \
+    --coords data/raw/coords.tsv
 
-# train probe
-python src/train_transformer.py --config runs/transformer_finetune/run_config.json
+# Train transformer linear probe
+python src/train_transformer.py \
+    --config runs/transformer_finetune/run_config.json
 
-# visualize results
-jupyter nbconvert --to html --execute notebooks/05_results_visualization.ipynb --output report/05_results_visualization.html
+# Generate result plots
+jupyter nbconvert --to html --execute \
+    notebooks/05_results_visualization.ipynb \
+    --output report/05_results_visualization.html
 \end{verbatim}
 
-% Additional practical notes to complete layout on page 6
-\paragraph{Data availability and license}
-Processed datasets used in the experiments (train/val/test splits and preprocessed NPZ files) are included in the `data/processed/` directory of the repository. Raw source references and coordinate files are provided under `data/raw/`. All code in the repository is released under the MIT license; see `LICENSE` for full terms.
+\subsection*{B. Data Availability and Licensing}
 
-\paragraph{Contact and support}
-For questions about reproducing results or for access to intermediate artifacts not present in the repository, please open an issue on the project GitHub or contact the author at \texttt{angel.morenu@ufl.edu}.
+Processed datasets (train/val/test NPZ files) are included in \texttt{data/processed/}. Raw references and coordinate files are stored under \texttt{data/raw/}. All code is released under the MIT license; see \texttt{LICENSE} for full terms.
+
+\subsection*{C. Contact and Support}
+
+For questions or access to additional artifacts, open a GitHub issue at: \texttt{https://github.com/angelmorenu/transformer-regulatory-dna}.
+
+\balance
+
+\section*{ACKNOWLEDGMENTS}
+
+This project was completed as part of CAP5510: Bioinformatics with Professor Kahveci. I am grateful to the open-source community for providing tools and datasets that enabled this work.
+
+\begin{thebibliography}{00}
+
+\bibitem{zhou2015deepsea}
+J.~Zhou and O.~G. Troyanskaya,
+``Predicting effects of noncoding variants with deep learning-based sequence model,''
+\emph{Nature Methods}, 2015.
+
+\bibitem{kelley2016basset}
+D.~R. Kelley, J.~Snoek, and J.~L. Rinn,
+``Basset: Learning the regulatory code with deep convolutional neural networks,''
+\emph{Genome Research}, 2016.
+
+\bibitem{ji2021dnabert}
+Y.~Ji et al.,
+``DNABERT: pre-trained Bidirectional Encoder Representations from Transformers model for DNA-language,''
+\emph{Bioinformatics}, 2021.
+
+\bibitem{dallatorre2023nucleotide}
+E.~Dalla-Torre et al.,
+``The Nucleotide Transformer: Building and evaluating foundation models for genomic analysis,''
+\emph{bioRxiv}, 2023.
+
+\end{thebibliography}
+
+\end{document}
 
 \section*{Acknowledgments}
 This project was supported by the University of Florida's CAP5510 - Bioinformatics course with Professor Kahveci. I also acknowledge the open-source community for providing tools and datasets that made this work possible.
