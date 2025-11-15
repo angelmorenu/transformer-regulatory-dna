@@ -1,0 +1,12 @@
+metric,value
+spearman_rho,
+spearman_pval,
+top10_overlap,10.0
+top10_fold,7.0
+top10_pval,2.5207678232969033e-12
+top25_overlap,25.0
+top25_fold,2.8
+top25_pval,1.549003875266589e-19
+top50_overlap,50.0
+top50_fold,1.4
+top50_pval,6.17723969651767e-18

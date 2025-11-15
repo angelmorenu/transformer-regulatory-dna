@@ -1,0 +1,77 @@
+record	pos	score
+# Synthetic DeepSEA-like scores (created for pipeline testing).
+# Included: idx:7 positions 1950-1999 (to match VEP top50) and a small idx:0 sample.
+
+# idx:7 top region (descending scores to make these deepsea top-K)
+idx:7	1999	100.0
+idx:7	1998	99.0
+idx:7	1997	98.0
+idx:7	1996	97.0
+idx:7	1995	96.0
+idx:7	1994	95.0
+idx:7	1993	94.0
+idx:7	1992	93.0
+idx:7	1991	92.0
+idx:7	1990	91.0
+idx:7	1989	90.0
+idx:7	1988	89.0
+idx:7	1987	88.0
+idx:7	1986	87.0
+idx:7	1985	86.0
+idx:7	1984	85.0
+idx:7	1983	84.0
+idx:7	1982	83.0
+idx:7	1981	82.0
+idx:7	1980	81.0
+idx:7	1979	80.0
+idx:7	1978	79.0
+idx:7	1977	78.0
+idx:7	1976	77.0
+idx:7	1975	76.0
+idx:7	1974	75.0
+idx:7	1973	74.0
+idx:7	1972	73.0
+idx:7	1971	72.0
+idx:7	1970	71.0
+idx:7	1969	70.0
+idx:7	1968	69.0
+idx:7	1967	68.0
+idx:7	1966	67.0
+idx:7	1965	66.0
+idx:7	1964	65.0
+idx:7	1963	64.0
+idx:7	1962	63.0
+idx:7	1961	62.0
+idx:7	1960	61.0
+idx:7	1959	60.0
+idx:7	1958	59.0
+idx:7	1957	58.0
+idx:7	1956	57.0
+idx:7	1955	56.0
+idx:7	1954	55.0
+idx:7	1953	54.0
+idx:7	1952	53.0
+idx:7	1951	52.0
+idx:7	1950	51.0
+
+# Small idx:0 sample region for additional merged positions
+idx:0	0	0.0
+idx:0	1	0.001
+idx:0	2	0.002
+idx:0	3	0.003
+idx:0	4	0.004
+idx:0	5	0.005
+idx:0	6	0.006
+idx:0	7	0.007
+idx:0	8	0.008
+idx:0	9	0.009
+idx:0	10	0.010
+idx:0	11	0.011
+idx:0	12	0.012
+idx:0	13	0.013
+idx:0	14	0.014
+idx:0	15	0.015
+idx:0	16	0.016
+idx:0	17	0.017
+idx:0	18	0.018
+idx:0	19	0.019
