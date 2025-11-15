@@ -195,8 +195,12 @@ Figure~\ref{fig:vep} shows the variant effect heatmap for the test set.
     \caption{Variant effect heatmap across positions (double-column view).}
     \label{fig:vep}
 \end{figure*}
+ 
+% DeepSEA comparison summary (computed with provided DeepSEA score file)
+	extbf{Comparison to DeepSEA (demo synthetic file):} \\ 
+Using the provided DeepSEA-style scores (pipeline demonstration), the merged VEP–DeepSEA set contained 70 matched positions. The Spearman rank correlation was undefined (constant VEP scores across the matched positions), and the top-K overlap/enrichment versus DeepSEA top-K were: K=10 overlap=10 (fold=7.0, p=2.52e-12), K=25 overlap=25 (fold=2.8, p=1.55e-19), and K=50 overlap=50 (fold=1.4, p=6.18e-18). These numbers were produced with a synthetic DeepSEA TSV to exercise the pipeline; when a real DeepSEA predictions file is available the script will recompute and the definitive values will be inserted into this paragraph.
 
-\textbf{Interpretation:}  
+	extbf{Interpretation:}  
 The model highlights nucleotides consistent with expected transcription factor binding sites. I believe the smoothness of the transformer attention layers helps capture broader context compared to CNN filters.
 
 \subsection{Top-K Variant Effects}
