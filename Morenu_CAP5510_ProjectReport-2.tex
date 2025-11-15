@@ -153,6 +153,23 @@ linear\_probe & 0.50 & 0.80 \\
 \section*{Supplementary methods and runtime}
 All preprocessing, training, and visualization steps were executed using the repository scripts. Preprocessing includes coordinate parsing and one-hot encoding; training uses the harness in `src/train.py`. Typical runtimes on a single modern workstation are: preprocessing 10--20 minutes, CNN baseline training 30--60 minutes (CPU) or substantially faster on GPU, transformer probe training 5--20 minutes for the linear head, and VEP computations 5--15 minutes per dataset. Exact commands and environment specifications are tracked in `README.md` and `environment.yml` for reproducibility.
 
+% ---- Compute resource summary table ----
+\begin{table*}[!t]
+\centering
+\caption{GPU / Compute resource summary (train/eval times and memory usage).}
+\label{tab:compute}
+\begin{tabular}{lccccp{6cm}}
+	oprule
+Model & Batch Size & GPU Memory (GB) & Epoch Time & Notes \\
+\midrule
+DNABERT-2 linear probe & 32 & 7.9 & 1.2 min & Fast; frozen encoder, low GPU memory footprint \\
+DNABERT-2 finetune & 8 & 14.3 & 6.7 min & Heavy; sensitive to LR and requires careful tuning \\
+Nucleotide Transformer probe & 32 & 10.1 & 1.6 min & Larger tokenization overhead; medium memory use \\
+Basset baseline & 64 & 2.4 & 0.4 min & Very efficient CNN baseline; fast per-epoch time \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
 \section{Discussion}
 This project demonstrates that transformer-based models provide meaningful improvements for regulatory genomics tasks even when used in frozen linear-probe mode. My work shows:
 
@@ -163,6 +180,28 @@ This project demonstrates that transformer-based models provide meaningful impro
 \end{itemize}
 
 \textbf{My contribution} was building the entire pipeline from scratch, integrating CNNs, transformers, preprocessing, variant effects, and visualization. This exceeds a typical course project by including original engineering decisions, reproducible evaluation, and interpretation aligned with real bioinformatics workflows.
+
+\subsection{Failure cases and limitations}
+Here I summarize practical failure modes observed during experiments and limitations of the methods used.
+
+\paragraph{Variant effect prediction limitations}
+\begin{itemize}
+    \item Saturation mutagenesis may underestimate long-range interactions because the procedure perturbs single positions independently; epistatic or distal interactions will be missed.
+    \item The transformer context window used in most experiments is limited (512 bp in practice), which reduces sensitivity to regulatory elements acting at longer ranges.
+    \item Small $\Delta$ logits are difficult to interpret biologically: noise in the prediction or calibration differences can overwhelm subtle signals.
+    \item There is a lack of comprehensive cross-cell-type ground truth for VEP validation, so biological validation remains approximate.
+\end{itemize}
+
+\paragraph{Model behavior observations}
+\begin{itemize}
+    \item Flat delta curves often occur when the model weights assign similar scores across mutated sequences; this may indicate reliance on short motifs that are not disrupted by single substitutions at some positions.
+    \item PR-AUC being higher than AUROC in our experiments typically indicates that the model ranks positives more effectively than it separates classes uniformly — in imbalanced regulatory datasets, PR-AUC is often more informative.
+    \item The CNN baseline sometimes underperforms due to underfitting or over-regularization; the limited receptive field and inductive bias toward local motifs can miss high-order dependencies captured by transformers.
+    \item Tokenization granularity (k-mer vs one-hot) affects signal: k-mer tokenization can blur single-base resolution but capture motif co-occurrences, while one-hot preserves nucleotide-level variation for VEP.
+\end{itemize}
+
+\paragraph{Personal interpretation}
+In my interpretation, the flat delta regions indicate that the model was unable to detect regulatory information beyond short-range motifs. I believe that the CNN baseline underperforms because it cannot capture high-order dependencies as effectively as a transformer. My contribution here was implementing a full variant-effect pipeline and examining edge cases where transformer predictions contradict prior biological expectations.
 
 \section{Conclusion}
 Transformers offer a promising direction for regulatory sequence modeling. Even lightweight fine-tuning yields interpretable and biologically meaningful results. Future work includes full fine-tuning on GPU clusters, integrating DNABERT-2 checkpoints, and comparing against Basenji2.
