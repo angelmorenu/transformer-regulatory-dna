@@ -2,8 +2,6 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{hyperref}
-% Make hyperlinks unobtrusive in the PDF
-\hypersetup{hidelinks}
 % left-align captions (avoid centered TABLE titles)
 \usepackage[justification=raggedright,singlelinecheck=false]{caption}
 \usepackage{booktabs}
@@ -46,7 +44,7 @@ Unlike prior survey-style projects, this work includes \emph{my own custom imple
 
 \section{Methods}
 \subsection{Datasets}
-All datasets originate from the DeepSEA \cite{zhou2015deepsea} training bundle and ENCODE/Roadmap epigenomics tracks. The processed data include:
+All datasets originate from the DeepSEA training bundle, ENCODE, and Roadmap epigenomics tracks \cite{zhou2015deepsea, deepsea_portal, encode_project, roadmap_portal}. The processed data include:
 \begin{itemize}
     \item Train, validation, and test splits: \texttt{train.npz}, \texttt{val.npz}, \texttt{test.npz}
     \item One-hot encoded sequences (length 1000 bases)
@@ -57,11 +55,11 @@ All datasets originate from the DeepSEA \cite{zhou2015deepsea} training bundle a
 For model selection and baseline comparisons we used publicly available pretrained models and reference implementations. Primary sources include:
 \begin{itemize}
     \item DNABERT-2 (HuggingFace): pretrained checkpoints and tokenizers (example: \url{https://huggingface.co/zhihan1996/DNABERT-2-117M}) \cite{nguyen2023dnabert2}.
-    \item Nucleotide Transformer (HuggingFace): multi-species pretrained checkpoints (example: \url{https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species}).
-    \item Basenji (Calico Labs): reference implementation and codebase (\url{https://github.com/calico/basenji}).
-    \item Basset (reference implementation / baseline): \url{https://github.com/davek44/Basset}.
-    \item DeepSEA resources and portal: model and data documentation (\url{http://deepsea.princeton.edu/help/}).
-    \item Optional ready-to-use model hubs (Kipoi): model cards and variant-effect wrappers (e.g., \url{https://kipoi.org/models/DeepSEA/predict/}, \url{https://kipoi.org/models/DeepSEA/variantEffects/}).
+    \item Nucleotide Transformer (HuggingFace): multi-species pretrained checkpoints (example: \url{https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species}) \cite{dallatorre2023nucleotide}.
+    \item Basenji (Calico Labs): reference implementation and codebase (\url{https://github.com/calico/basenji}) \cite{basenji_github}.
+    \item Basset (reference implementation / baseline): codebase on GitHub (\url{https://github.com/davek44/Basset}) and original paper \cite{kelley2016basset}.
+    \item DeepSEA resources and portal: model and data documentation (portal: \url{http://deepsea.princeton.edu/help/}) \cite{deepsea_portal, zhou2015deepsea}.
+    \item Optional ready-to-use model hubs (Kipoi): model cards and variant-effect wrappers (e.g., \url{https://kipoi.org/models/DeepSEA/predict/}, \url{https://kipoi.org/models/DeepSEA/variantEffects/}) \cite{kipoi_models}.
 \end{itemize}
 
 Where available we used HuggingFace checkpoints as starting points for probes and finetuning; open-source Basenji/Basset code served as lightweight CNN baselines for direct implementation and runtime comparisons.
@@ -71,39 +69,16 @@ Where available we used HuggingFace checkpoints as starting points for probes an
 \centering
 \caption{Model checkpoints and sources used in experiments (examples).}
 \label{tab:checkpoints}
-\begin{tabular}{lp{6.3cm}}
+\begin{tabular}{l p{6.3cm} p{2.5cm}}
 \toprule
-Model & Checkpoint / source \\
+\textbf{Parameter} & \textbf{Range} & \textbf{Notes} \\
 \midrule
-DNABERT-2 & \texttt{zhihan1996/DNABERT-2-117M} (HuggingFace) \\
-Nucleotide Transformer v2 & \texttt{InstaDeepAI/nucleotide-transformer-v2-50m-multi-species} (HuggingFace) \\
-Probe (linear head) & \texttt{notebooks/results/checkpoints/probe\_best.pt} (repo) \\
-Basset / Basenji baseline & \texttt{notebooks/results/bassetmini\_best.pt} or Basenji reference implementation (GitHub) \\
+DNABERT-2 checkpoint & HuggingFace & e.g., zhihan1996/DNABERT-2-117M \\
+Nucleotide Transformer & HuggingFace & e.g., InstaDeepAI/nucleotide-transformer-v2-50m \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Reference sequences were obtained from hg19 using the provided coordinate files. Variant effect experiments used custom BED regions and test regions generated during cell-line holdout experiments.
-
-\subsection{CNN Baseline}
-I implemented a lightweight Basset-style CNN with:
-\begin{itemize}
-    \item 3 convolutional layers
-    \item max-pooling
-    \item fully connected predictor layer
-\end{itemize}
-The baseline serves as a standard point of comparison for AUROC/PR-AUC.
-
-\subsection{Transformer Linear Probe}
-A pretrained transformer encoder (DNABERT-2 when available) was frozen, and only a linear classification head was trained:
-\[
-\hat{y} = \sigma(W \cdot h_{\mathrm{CLS}} + b)
-\]
-Where $h_{\mathrm{CLS}}$ or mean-pooled hidden states were used depending on the model.
-
-Most experiments used a fallback TinyEnc model due to PyTorch version restrictions, but the pipeline supports full transformer fine-tuning on GPU-enabled environments.
-
-\subsection{Variant Effect Prediction}
 Saturation mutagenesis was performed by:
 \begin{enumerate}
     \item Selecting a center position in a regulatory sequence.
@@ -355,7 +330,7 @@ To facilitate reproducibility and document the ranges explored during developmen
 \centering
 \begin{tabular}{p{2.2cm} p{2cm} p{3.6cm}}
 \hline
-        extbf{Parameter} & \textbf{Range} & \textbf{Notes} \\
+        \textbf{Parameter} & \textbf{Range} & \textbf{Notes} \\
 \hline
 Learning rate (probe head) & $1\times 10^{-5}$ -- $1\times 10^{-3}$ & Log-uniform sweep, default $5\times10^{-4}$ \\
 Batch size & 8 -- 64 & Determined by GPU memory; CNNs allow larger batches \\
@@ -432,34 +407,21 @@ E.~Dalla-Torre et al.,
 ``The Nucleotide Transformer: Building and evaluating foundation models for genomic analysis,''
 \emph{bioRxiv}, 2023.
 
-\end{thebibliography}
+% Web / resource citations
+\bibitem{basenji_github}
+Calico Labs, ``Basenji -- GitHub repository,'' \url{https://github.com/calico/basenji} (accessed Nov 2025).
 
-\end{document}
+\bibitem{deepsea_portal}
+DeepSEA Project, ``DeepSEA Web Portal and help pages,'' \url{http://deepsea.princeton.edu/help/} (accessed Nov 2025).
 
-\section*{Acknowledgments}
-This project was supported by the University of Florida's CAP5510 - Bioinformatics course with Professor Kahveci. I also acknowledge the open-source community for providing tools and datasets that made this work possible.
+\bibitem{kipoi_models}
+Kipoi community, ``Kipoi model hub (DeepSEA models),'' \url{https://kipoi.org/models/DeepSEA/} (accessed Nov 2025).
 
-\begin{thebibliography}{1}
+\bibitem{encode_project}
+ENCODE Project Consortium, ``ENCODE Project Portal,'' \url{https://www.encodeproject.org/} (accessed Nov 2025).
 
-\bibitem{zhou2015deepsea}
-J.~Zhou and O.~G. Troyanskaya,
-``Predicting effects of noncoding variants with deep learning-based sequence model,''
-\emph{Nature Methods}, 2015.
-
-\bibitem{kelley2016basset}
-D.~R. Kelley, J.~Snoek, and J.~L. Rinn,
-``Basset: Learning the regulatory code with deep convolutional neural networks,''
-\emph{Genome Research}, 2016.
-
-\bibitem{ji2021dnabert}
-Y.~Ji \emph{et al.},
-``DNABERT: pre-trained Bidirectional Encoder Representations from Transformers model for DNA-language in genome,''
-\emph{Bioinformatics}, 2021.
-
-\bibitem{dallatorre2023nucleotide}
-E.~Dalla-Torre \emph{et al.},
-``The Nucleotide Transformer: Building and evaluating foundation models for genomic analysis,''
-\emph{bioRxiv}, 2023.
+\bibitem{roadmap_portal}
+NIH Roadmap Epigenomics, ``Roadmap Epigenomics Data Portal (WashU),'' \url{https://egg2.wustl.edu/roadmap/web_portal/} (accessed Nov 2025).
 
 \end{thebibliography}
 
