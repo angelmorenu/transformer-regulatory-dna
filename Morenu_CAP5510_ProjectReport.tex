@@ -263,10 +263,45 @@ Here I summarize practical failure modes observed during experiments and limitat
 In my interpretation, the flat delta regions indicate that the model was unable to detect regulatory information beyond short-range motifs. I believe that the CNN baseline underperforms because it cannot capture high-order dependencies as effectively as a transformer. My contribution here was implementing a full variant-effect pipeline and examining edge cases where transformer predictions contradict prior biological expectations.
 
 \section{Conclusion}
-Transformers offer a promising direction for regulatory sequence modeling. Even lightweight fine-tuning yields interpretable and biologically meaningful results. Future work includes full fine-tuning on GPU clusters, integrating DNABERT-2 checkpoints, and comparing against Basenji2.
+\sloppy
+Transformers offer a promising direction for regulatory sequence modeling. Even lightweight fine-tuning yields interpretable and biologically meaningful results. Future work includes full fine-tuning on GPU clusters, integrating \texttt{DNABERT-2} checkpoints, and comparing against \texttt{Basenji2}.
+\fussy
+
+\section*{Appendix: reproducibility and hyperparameter ranges}
+To facilitate reproducibility and to document the ranges explored during development, Table~\ref{tab:hp_ranges} lists the primary hyperparameter ranges used in ablation and tuning sweeps. These ranges and the checklist above should allow other researchers to replicate the main experiments with minor adjustments for compute availability. For a more detailed ablation (per-task breakdown and additional plots) see the extended report attached with this submission.
+
+\begin{table*}[!t]
+\centering
+\caption{Hyperparameter ranges used during tuning and ablation.}
+\label{tab:hp_ranges}
+\begin{tabular}{llp{8cm}}
+	oprule
+Parameter & Range & Notes \\
+\midrule
+Learning rate (probe head) & $1\times10^{-5}$ -- $1\times10^{-3}$ & Typical sweep: log-uniform; default used: $5\times10^{-4}$. \\
+Batch size & 8 -- 64 & Chosen by GPU memory; larger batches used for CNN baseline. \\
+Weight decay & 0 -- $1\times10^{-2}$ & Small weight decay stabilizes probe training. \\
+Epochs & 6 -- 30 & Early stopping on val AUROC with patience 5. \\
+Sequence length & 1000 (default) & Longer windows (3k--5k) were considered in extended experiments; see extended report. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\paragraph{Quick reproduce commands}
+Example commands to reproduce the main runs (adjust `--config` to local paths):
+\begin{verbatim}
+# preprocess
+python src/collate.py --out data/processed --coords data/raw/coords.tsv
+
+# train probe
+python src/train_transformer.py --config runs/transformer_finetune/run_config.json
+
+# visualize results
+jupyter nbconvert --to html --execute notebooks/05_results_visualization.ipynb --output report/05_results_visualization.html
+\end{verbatim}
 
 \section*{Acknowledgments}
-I thank Professor Kahveci for guidance and feedback throughout this project. I also acknowledge the open-source community for providing tools and datasets that made this work possible.
+This project was supported by the University of Florida's CAP5510 - Bioinformatics course with Professor Kahveci. I also acknowledge the open-source community for providing tools and datasets that made this work possible.
 
 \begin{thebibliography}{1}
 
