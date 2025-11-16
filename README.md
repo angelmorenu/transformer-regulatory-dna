@@ -57,6 +57,29 @@ pip install -r requirements.txt
 
 ---
 
+## Report
+
+- The full project report PDF is produced at the repository root as
+    `Morenu_CAP5510_ProjectReport.pdf` (also generated from
+    `Morenu_CAP5510_ProjectReport.tex`). To (re)build the PDF locally you can
+    use:
+
+```bash
+latexmk -pdf -interaction=nonstopmode Morenu_CAP5510_ProjectReport.tex
+# or: pdflatex Morenu_CAP5510_ProjectReport.tex (run twice)
+```
+
+If you don't have a local TeX toolchain, the repository's CI builds an
+artifact on push to the `notebooks/visualization-fix` branch.
+
+## Clean-up notes
+
+- The repository ignores common macOS and editor cruft (see `gitignore.txt`).
+- If you see files prefixed with `._` or `.DS_Store` in `git status`, you can
+    safely remove them locally; they are ignored by default.
+
+---
+
 ## Project Structure
 ```
 transformer-regulatory-dna/
@@ -89,11 +112,71 @@ transformer-regulatory-dna/
 │   ├── plots/
 │   └── logs/
 └── report/
-        └── Morenu_CAP5510_ProjectReport.tex
-```
+        # Transformer Fine-Tuning for Regulatory DNA
 
----
+        **Author:** Angel Morenu
 
-## Contact
-angel.morenu@ufl.edu  
-University of Florida — CAP 5510 Bioinformatics
+        This repository contains a reproducible pipeline for evaluating transformer-based models on regulatory DNA classification and variant-effect prediction. It includes data preprocessing, CNN baselines, transformer linear-probe experiments, variant-effect (VEP) analysis, plotting, and a LaTeX report with auto-inserted numeric summaries comparing our variant-effect scores to DeepSEA.
+
+        Highlights
+        - Transformer probe (frozen encoder + linear head) experiments
+        - CNN baselines (Basset-style) for direct comparison
+        - Variant effect prediction and Top-K enrichment vs DeepSEA
+        - Reproducible notebooks and scripts that generate plots under `notebooks/results/`
+        - Project report: `Morenu_CAP5510_ProjectReport.tex` and tracked `Morenu_CAP5510_ProjectReport.pdf`
+
+        ## Quick setup
+        Use the provided environment files to recreate the Python environment:
+
+        ```bash
+        conda env create -f environment.yml   # preferred (if using conda)
+        conda activate bio-transformers
+        pip install -r requirements.txt       # alternative
+        ```
+
+        ## How to reproduce main artifacts
+        - Preprocess data: run `notebooks/01_data_preprocessing.ipynb` (or `python src/collate.py`)
+        - Train baselines: `notebooks/02_baseline_models.ipynb`
+        - Fine-tune / probe: `notebooks/03_transformer_finetuning.ipynb` or `python src/train_transformer.py`
+        - Variant effects: `notebooks/04_variant_effects.ipynb` (VEP deltas and top-K tables)
+        - Visualizations and summaries (generate plots in-place): `notebooks/05_results_visualization.ipynb`
+
+        The notebooks write results and plots to `notebooks/results/plots/` and VEP outputs to `notebooks/results/vep/`.
+
+        ## Report (LaTeX)
+        - The project report lives in `Morenu_CAP5510_ProjectReport.tex` and the generated PDF is tracked at the repository root `Morenu_CAP5510_ProjectReport.pdf`.
+        - To build locally (requires a TeX Live / MacTeX installation):
+
+        ```bash
+        cd "$(pwd)"
+        latexmk -pdf -interaction=nonstopmode Morenu_CAP5510_ProjectReport.tex
+        # or: pdflatex Morenu_CAP5510_ProjectReport.tex  # run twice
+        ```
+
+        - The report includes an auto-generated macros file `notebooks/results/plots/vep_deepsea_summary.tex` (produced by `scripts/write_vep_deepsea_tex.py`) which injects numeric summaries (Spearman, top-K overlaps) into the LaTeX source. If you regenerate VEP comparisons, re-run that script before rebuilding the report.
+
+        ## Useful scripts and locations
+        - `src/compute_vep_vs_deepsea.py` — align VEP and DeepSEA per-position scores and compute Spearman / top-K enrichments.
+        - `scripts/write_vep_deepsea_tex.py` — write LaTeX macros consumed by the report (`vep_deepsea_summary.tex`).
+        - `notebooks/results/plots/` — plots and auto-generated LaTeX macros used by the report.
+        - `notebooks/results/vep/` — VEP outputs (deltas, top-K lists).
+
+        ## Tests
+        - Run unit tests (pytest):
+
+        ```bash
+        pytest -q
+        ```
+
+        ## Clean-up and housekeeping
+        - The repository `.gitignore` now ignores common macOS/editor cruft (`.DS_Store`, `._*`) and large artifact files while explicitly allowing the main report PDF `Morenu_CAP5510_ProjectReport.pdf` to be tracked.
+        - If you see stray `._` files in `git status`, they are macOS resource forks and can be safely removed locally; they are ignored by git after updating `.gitignore`.
+
+        ## Branches / CI
+        - The branch `notebooks/visualization-fix` contains fixes to the LaTeX macros and an included report PDF; CI on that branch builds the report artifact on push.
+
+        ## Contact
+        If you need help reproducing the report or regenerating the VEP / DeepSEA comparisons, open an issue on the repository or email angel.morenu@ufl.edu.
+
+        ---
+        Last updated: 2025-11-15
