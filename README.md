@@ -81,6 +81,7 @@ artifact on push to the `notebooks/visualization-fix` branch.
 ---
 
 ## Project Structure
+
 ```
 transformer-regulatory-dna/
 ├── README.md
@@ -88,8 +89,8 @@ transformer-regulatory-dna/
 ├── environment.yml
 ├── requirements.txt
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── raw/            # downloaded DeepSEA / ENCODE / Roadmap inputs (not tracked)
+│   └── processed/      # preprocessed sequences / splits used by notebooks/scripts
 ├── notebooks/
 │   ├── 01_data_preprocessing.ipynb
 │   ├── 02_baseline_models.ipynb
@@ -97,7 +98,7 @@ transformer-regulatory-dna/
 │   ├── 04_variant_effects.ipynb
 │   └── 05_results_visualization.ipynb
 ├── src/
-│   ├── collate.py
+│   ├── collate.py           # build processed datasets from data/raw
 │   ├── data_utils.py
 │   ├── train_baseline.py
 │   ├── train_transformer.py
@@ -111,7 +112,19 @@ transformer-regulatory-dna/
 │   │   └── summary.csv
 │   ├── plots/
 │   └── logs/
-└── report/
+└── report/                  # LaTeX source and generated PDF (Morenu_CAP5510_ProjectReport.*)
+```
+
+Notes
+- Use conda environment.yml or requirements.txt to reproduce the environment.
+- Typical quick workflow:
+    1. Place raw data under data/raw/.
+    2. Run preprocessing: python src/collate.py or notebooks/01_data_preprocessing.ipynb.
+    3. Train/evaluate models via notebooks or src/train_*.py.
+    4. Variant-effect outputs and plots are written to results/vep/ and results/plots/.
+- The report is generated from report/ (Tex) and includes auto-generated LaTeX macros produced under notebooks/results/ when VEP comparisons are regenerated.
+- Keep large raw downloads out of git; results and the main PDF are tracked as needed.
+- Last updated: 2025-11-15
         # Transformer Fine-Tuning for Regulatory DNA
 
         **Author:** Angel Morenu
