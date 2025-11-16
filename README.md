@@ -57,6 +57,29 @@ pip install -r requirements.txt
 
 ---
 
+## Report
+
+- The full project report PDF is produced at the repository root as
+    `Morenu_CAP5510_ProjectReport.pdf` (also generated from
+    `Morenu_CAP5510_ProjectReport.tex`). To (re)build the PDF locally you can
+    use:
+
+```bash
+latexmk -pdf -interaction=nonstopmode Morenu_CAP5510_ProjectReport.tex
+# or: pdflatex Morenu_CAP5510_ProjectReport.tex (run twice)
+```
+
+If you don't have a local TeX toolchain, the repository's CI builds an
+artifact on push to the `notebooks/visualization-fix` branch.
+
+## Clean-up notes
+
+- The repository ignores common macOS and editor cruft (see `gitignore.txt`).
+- If you see files prefixed with `._` or `.DS_Store` in `git status`, you can
+    safely remove them locally; they are ignored by default.
+
+---
+
 ## Project Structure
 ```
 transformer-regulatory-dna/

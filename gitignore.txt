@@ -1,0 +1,50 @@
+# OS cruft
+.DS_Store
+.AppleDouble
+._*
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+.notebooks/            # accidental hidden copy
+*_checkpoint.ipynb
+
+# Data & results (keep directory with .gitkeep, ignore contents)
+data/*
+!data/.gitkeep
+data/**/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+results/*
+!results/.gitkeep
+results/**/*
+!results/plots/.gitkeep
+
+# Large weights/artifacts
+*.pt
+*.bin
+*.safetensors
+*.npz
+*.npy
+*.h5
+*.tar.gz
+*.zip
+# Generally ignore PDFs to avoid committing figures and exports, but allow the
+# main project report PDF to be tracked when intentionally added.
+*.pdf
+!Morenu_CAP5510_ProjectReport.pdf
+
+# Logs
+*.log
+logs/
