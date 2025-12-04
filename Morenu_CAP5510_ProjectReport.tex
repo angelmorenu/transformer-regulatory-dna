@@ -52,7 +52,7 @@ All datasets originate from the DeepSEA training bundle, ENCODE, and Roadmap epi
 \end{itemize}
 
 \subsection{Models and sources}
-For model selection and baseline comparisons we used publicly available pretrained models and reference implementations. Primary sources include:
+For model selection and baseline comparisons I used publicly available pretrained models and reference implementations. Primary sources include:
 \begin{itemize}
     \item DNABERT-2 (HuggingFace): pretrained checkpoints and tokenizers (example: \url{https://huggingface.co/zhihan1996/DNABERT-2-117M}) \cite{nguyen2023dnabert2}.
     \item Nucleotide Transformer (HuggingFace): multi-species pretrained checkpoints (example: \url{https://huggingface.co/InstaDeepAI/nucleotide-transformer-v2-50m-multi-species}) \cite{dallatorre2023nucleotide}.
@@ -62,7 +62,7 @@ For model selection and baseline comparisons we used publicly available pretrain
     \item Optional ready-to-use model hubs (Kipoi): model cards and variant-effect wrappers (e.g., \url{https://kipoi.org/models/DeepSEA/predict/}, \url{https://kipoi.org/models/DeepSEA/variantEffects/}) \cite{kipoi_models}.
 \end{itemize}
 
-Where available we used HuggingFace checkpoints as starting points for probes and finetuning; open-source Basenji/Basset code served as lightweight CNN baselines for direct implementation and runtime comparisons.
+Where available I used HuggingFace checkpoints as starting points for probes and finetuning; open-source Basenji/Basset code served as lightweight CNN baselines for direct implementation and runtime comparisons.
 
 % Short reproducibility table listing exact checkpoints used in experiments
 \begin{table*}[!t]
@@ -246,7 +246,7 @@ VEP validation & Manually inspect top-K variant sites and cross-check with motif
 \section*{Supplementary methods and runtime}
 All preprocessing, training, and visualization steps were executed using the repository scripts. Preprocessing includes coordinate parsing and one-hot encoding; training uses the harness in `src/train.py`. Typical runtimes on a single modern workstation are: preprocessing 10--20 minutes, CNN baseline training 30--60 minutes (CPU) or substantially faster on GPU, transformer probe training 5--20 minutes for the linear head, and VEP computations 5--15 minutes per dataset. Exact commands and environment specifications are tracked in `README.md` and `environment.yml` for reproducibility.
 
-Feasibility note: to keep experiments tractable we leveraged publicly available pretrained checkpoints (HuggingFace DNABERT-2 and Nucleotide Transformer) and limited fine-tuning to short windows (1 kb) in most experiments. Heavy finetuning runs were reserved for HPC nodes or Colab Pro when a GPU was required; lightweight baselines (Basset/Basenji) and frozen linear probes enabled practical runtime and memory comparisons on single-GPU or workstation setups.
+Feasibility note: to keep experiments tractable I leveraged publicly available pretrained checkpoints (HuggingFace DNABERT-2 and Nucleotide Transformer) and limited fine-tuning to short windows (1 kb) in most experiments. Heavy finetuning runs were reserved for HPC nodes or Colab Pro when a GPU was required; lightweight baselines (Basset/Basenji) and frozen linear probes enabled practical runtime and memory comparisons on single-GPU or workstation setups.
 
 Code and data: the full repository (code, processed inputs, notebooks, and results) is available at \url{https://github.com/angelmorenu/transformer-regulatory-dna}.
 
@@ -292,7 +292,7 @@ Here I summarize practical failure modes observed during experiments and limitat
 \paragraph{Model behavior observations}
 \begin{itemize}
     \item Flat delta curves often occur when the model weights assign similar scores across mutated sequences; this may indicate reliance on short motifs that are not disrupted by single substitutions at some positions.
-    \item PR-AUC being higher than AUROC in our experiments typically indicates that the model ranks positives more effectively than it separates classes uniformly in imbalanced regulatory datasets; PR-AUC is often more informative.
+    \item PR-AUC being higher than AUROC in the experiments typically indicates that the model ranks positives more effectively than it separates classes uniformly in imbalanced regulatory datasets; PR-AUC is often more informative.
     \item The CNN baseline sometimes underperforms due to underfitting or over-regularization; the limited receptive field and inductive bias toward local motifs can miss high-order dependencies captured by transformers.
     \item Tokenization granularity (k-mer vs one-hot) affects signal: k-mer tokenization can blur single-base resolution but capture motif co-occurrences, while one-hot preserves nucleotide-level variation for VEP.
 \end{itemize}
@@ -310,11 +310,11 @@ Planned next steps include: (1) full fine-tuning of DNABERT-2 over longer window
 \section*{Contributions}
 The following contributions summarize the author's work on this project and may be used for attribution or grading:
 \begin{itemize}
-    \item Conceptualization and project design: A.M.
-    \item Implementation: data preprocessing, CNN baseline, transformer probe, training harness, and VEP pipeline: A.M.
-    \item Experiments and analysis: model training runs, variant-effect analyses, plotting, and statistical summaries: A.M.
-    \item Writing and visualization: manuscript text, figures, and result interpretation: A.M.
-    \item Reproducibility artifacts: notebooks, scripts, and environment specification included in repository: A.M.
+    \item Conceptualization and project design.
+    \item Implementation: data preprocessing, CNN baseline, transformer probe, training harness, and VEP pipeline.
+    \item Experiments and analysis: model training runs, variant-effect analyses, plotting, and statistical summaries.
+    \item Writing and visualization: manuscript text, figures, and result interpretation.
+    \item Reproducibility artifacts: notebooks, scripts, and environment specification included in repository.
 \end{itemize}
 
 % small nudge to help final page balancing if needed
