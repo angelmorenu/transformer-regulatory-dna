@@ -97,6 +97,10 @@ transformer-regulatory-dna/
 │   ├── 03_transformer_finetuning.ipynb
 │   ├── 04_variant_effects.ipynb
 │   └── 05_results_visualization.ipynb
+└── notebooks/results/
+    ├── plots/
+    │   └── vep_deepsea_summary.tex
+    └── vep/  
 ├── src/
 │   ├── collate.py           # build processed datasets from data/raw
 │   ├── data_utils.py
@@ -112,7 +116,9 @@ transformer-regulatory-dna/
 │   │   └── summary.csv
 │   ├── plots/
 │   └── logs/
-└── report/                  # LaTeX source and generated PDF (Morenu_CAP5510_ProjectReport.*)
+├── report/
+│   ├── Morenu_CAP5510_ProjectReport.tex
+│   └── Morenu_CAP5510_ProjectReport.pdf      
 ```
 
 Notes
