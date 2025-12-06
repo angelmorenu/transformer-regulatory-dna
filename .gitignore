@@ -13,6 +13,9 @@ data/processed/*
 results/logs/*
 results/plots/*
 
+# Large files
+notebooks/results/deepsea/test_sequences.fasta
+
 # Notebooks checkpoints
 .ipynb_checkpoints/
 
